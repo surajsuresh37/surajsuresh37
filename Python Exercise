@@ -1,1 +1,34 @@
+import sys
+import json
+import requests
+import csv
 
+headers = {'Authorization': 'Basic bWFyYS9wZXJzb25uZWwvc3VyYWpzdXJlc2g6UmFqcmVldGhAMTk4OQ==','content-type': 'application/json'}
+
+ClientID = 'sampoerna'
+MaxDateRange = '2021-02-11T00%3A00%3A00.000Z'
+MinDateRange = '2021-02-01T00%3A23%3A59.000Z'
+
+Endpoint = f"https://api.locus-api.com/v1/client/{ClientID}/batch/?limit=1000&maxTime={MaxDateRange}&minTime={MinDateRange}"
+
+try:
+    Getbatchdetails = {}
+    Getbatchdetailsrequest = requests.get(Endpoint, headers=headers, json =Getbatchdetails)
+    GetbatchData = Getbatchdetailsrequest.json()
+    for i in GetbatchData['batches']:
+        batchIdinfo = (i['batchId'])
+        BatchCreatedDate = (i['createdOn'])
+        BatchID = (batchIdinfo['batchId'])
+        BatchCreatedBy = (i['statusUpdates'])
+        teaminfo = (i['teamIds'])
+        Skillinfo = (i['batchSummary']['skills'])
+        for i in teaminfo:
+            TeamID = (i['teamId'])
+            for i in BatchCreatedBy:
+                CreatedBy = (i['actor']['id'])
+        print(TeamID,"||",BatchID,"||",BatchCreatedDate,"||",CreatedBy,"||",Skillinfo)
+
+
+
+except (Exception) as e:
+    print(e)
